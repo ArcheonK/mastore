@@ -1,0 +1,148 @@
+{% load currency %}
+{% load cumulative %}
+{% load i18n %}
+
+{% if advertisements %}
+    <div class="panel panel-default">
+        <div class="panel-body" style="overflow: hidden;">
+            <script type="text/javascript"><!--
+            google_ad_client = "ca-pub-4435275545393266";
+            /* MarketSideBar */
+            google_ad_slot = "1601721299";
+            google_ad_width = 320;
+            google_ad_height = 50;
+            //-->
+            </script>
+            <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+        </div>
+    </div>
+{% endif %}
+{% if modules.count != 0 %}
+    {% for market_modules in modules %}
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ market_modules.title }}</div>
+            {% if market_modules.type == '1' %}
+                <div class="panel-body store-status">
+                    <span class="{% if market_modules.online %}circle-online{% else %}circle-offline{% endif %}"></span>
+                        <span class="text-muted">{{ market_modules.ip }}{% if  market_modules.port != 25565 %}:
+                            {{ market_modules.port }}{% endif %}</span> <span
+                        class="text-muted pull-right">{{ market_modules.players }} of {{ market_modules.maxplayers }} {% trans "online" %}</span>
+                </div>
+            {% elif market_modules.type == '2' %}
+                {% if market_modules.recent_donors.count > 0 %}
+                <div class="panel-body store-donators text-center">
+                        {% for donor in market_modules.recent_donors.all %}
+                            <div class="donator col-md-6">
+                                <div class="donator-img">
+                                    <img src="http://cravatar.eu/helmavatar/{{ donor.username }}/100"
+                                         title="{{ donor.username }}" alt="{{ donor.username }}" class="img-circle img-responsive center-block">
+                                </div>
+                                <p><span
+                                        class="donator-username"><b>{{ donor.username }}</b></br></span>{{ donor.itemid }}</p>
+                            </div>
+                        {% endfor %}
+                </div>
+                    {% else %}
+                                                <ul class="list-group">
+  <li class="list-group-item text-center" style="color:#ffffff; background-color: #3498db;">No recent purchases.</li>
+</ul>
+                {% endif %}
+                {% elif market_modules.type == '3' %}
+                <div class="panel-body store-goal">
+                    <span class="text-muted">{{ market_modules.goal_amount }} / {{ market_modules.goal }} {{ market.currency }}</span>
+
+                    <div class="progress" style="margin-top: 10px; margin-bottom: 0px;">
+                        <div class="progress-bar progress-bar-striped{% if market_modules.goal_animated %} active{% endif %}"
+                             role="progressbar" aria-valuenow="{{ market_modules.goal_percentage }}"
+                             arial-valuemin="0" aria-valuemax="100"
+                             style="width: {{ market_modules.goal_percentage }}%"></div>
+                    </div>
+                </div>
+            {% elif market_modules.type == '4' %}
+                <div class="panel-body">
+                    {{ market_modules.text|safe|removetags:"script object src SRC OBJECT SCRIPT" }}
+                </div>
+            {% elif market_modules.type == '5' %}
+              {% if market_modules.top_donor and market_modules.donor_amount %}
+                <div class="panel-body">
+                    <div class="module-topdonor">
+                        <div class="module-topdonor-image">
+                            <img src="https://www.minecraftmarket.com/api/profiles/full2d/{{ market_modules.top_donor }}/100/"
+                                 width="50" height="100" title="{{ market_modules.top_donor }}"
+                                 alt="{{ market_modules.top_donor }}">
+
+                        </div>
+                        <div class="module-topdonor-text">
+                            <h3>{{ market_modules.top_donor }}</h3>
+                            <small>{% trans "has spent" %} {% change_currency market_modules.donor_amount request.session.currency market.currency %} {{ request.session.currency }}</small>
+                        </div>
+                    </div>
+
+                </div>
+                  {% else %}
+                            <ul class="list-group">
+  <li class="list-group-item text-center" style="color:#ffffff; background-color: #3498db;">No top customers.</li>
+</ul>
+                    {% endif %}
+            {% elif market_modules.type == '6' %}
+                <div class="panel-body">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="item-borderless">
+                            <a href="#" data-target="#featured{{ market_modules.featureditem.id }}"
+                               class="img-thumbnail" data-toggle="modal" style="border: 0;">
+                                <img src="
+                                        {% if market_modules.featureditem.itemimage %}{{ MEDIA_URL }}{{ market_modules.featureditem.itemimage }}{% else %}{{ MEDIA_URL }}itemimages/default.png{% endif %}"
+                                     height="165" width="190" class="img-responsive">
+                            </a>
+
+                            <div class="caption">
+                                <div class="category-item-name">
+                                    {{ market_modules.featureditem.itemName }}
+                                </div>
+                                <div class="category-item-price">
+                                    {% cumulative_pricing market_modules.featureditem.itemPrice market_modules.featureditem.itemCat.id market_modules.featureditem.id request.session.username CURRENCY.code market.currency %} {{ request.session.currency }}
+                                </div>
+                                <div class="category-item-details">
+                                    <a data-target="#featured{{ market_modules.featureditem.id }}" role="button"
+                                       class="btn btn-info btn-xs" data-toggle="modal">{% trans "Details" %}</a>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="featured{{ market_modules.featureditem.id }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">{{ market_modules.featureditem.itemName }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ market_modules.featureditem.itemDesc|safe|removetags:"script object src SRC OBJECT SCRIPT" }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="pull-left"><strong>
+                                    {% cumulative_pricing market_modules.featureditem.itemPrice market_modules.featureditem.itemCat.id market_modules.featureditem.id request.session.username CURRENCY.code market.currency %} {{ request.session.currency }}
+                                            </strong></div>
+                                            <a href="/checkout/item/add/{{ market_modules.featureditem.id }}/1">
+                                                <button class="btn btn-primary">{% trans "Add to cart" %}</button>
+                                            </a>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+            {% endif %}
+
+        </div>
+
+
+    {% endfor %}
+{% endif %}

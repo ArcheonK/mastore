@@ -1,0 +1,67 @@
+{% extends base %}
+{% load currency %}
+{% load i18n %}
+{% block content %}
+
+    <h2>Checkout</h2>
+            <form id="cart_gateways" method="post" action="/checkout/pay/"
+                  onsubmit="return Checkout($(this));">
+                <input id="gateway_choice" type="hidden" name="gateway" value="">
+                <table class="table checkout-gateway-list">
+                    {% for gateway in gateways %}
+
+                        <tr>
+                            {% if gateway.type == '1' %}
+                                <td width="50%">
+                                    <img class="img-responsive checkout-gateway-image"
+                                         src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-150px.png"
+                                         border="0" alt="PayPal Logo">
+                                </td>
+                                <td>
+                                    <input type="submit" name="{{ gateway.id }}"
+                                           class="gateway_submit btn btn-success pull-right"
+                                           value="{% trans "Complete" %}">
+                                </td>
+                            {% elif gateway.type == '2' %}
+                                <td width="50%">
+                                    <img class="img-responsive checkout-gateway-image"
+                                         src="http://www.paymentwall.com/images/buttons/logo2_big.png"
+                                         width="150" border="0" alt="PaymentWall Logo">
+                                </td>
+                                <td>
+                                    <input type="submit" name="{{ gateway.id }}"
+                                           class="gateway_submit btn btn-success pull-right"
+                                           value="{% trans "Complete" %}">
+                                </td>
+
+                            {% elif gateway.type == '3' %}
+                                <td width="50%">
+                                    <img class="img-responsive checkout-gateway-image"
+                                         src="https://www.paygol.com/images/index_logo_main.png"
+                                         border="0" alt="PayGol Logo">
+                                </td>
+                                <td>
+                                    <input type="submit" name="{{ gateway.id }}"
+                                           class="gateway_submit btn btn-success pull-right"
+                                           value="{% trans "Complete" %}">
+                                </td>
+
+                            {% elif gateway.type == '4' %}
+                                <td width="50%">
+                                    <img class="img-responsive checkout-gateway-image"
+                                         src="http://assets.minecraftmarket.com/static/img/google_wallet.png"
+                                         border="0" alt="PayGol Logo">
+                                </td>
+                                <td>
+                                    <input type="submit" name="{{ gateway.id }}"
+                                           class="gateway_submit btn btn-success pull-right"
+                                           value="{% trans "Complete" %}">
+                                </td>
+
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </form>
+
+{% endblock %}

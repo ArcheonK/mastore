@@ -1,0 +1,6 @@
+{% extends base  %}
+{% load cumulative %}
+{% load i18n %}
+{% block content %}
+                {{ market.TOS|safe|removetags:"script object src SRC OBJECT SCRIPT" }}
+{% endblock %}

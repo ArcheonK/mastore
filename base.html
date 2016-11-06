@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Metadata, Stylesheet, Title -->
+
+<!-- UI.X Version 5
+Created by Jerred Shepherd (RiotShielder)
+Design by Audentio -->
+
+<head>
+    <title>Shop | The Storm</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="The Storm">
+    <meta name="author" content="Jerred Shepherd">
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <link href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700" rel='stylesheet' type='text/css'>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{ MEDIA_URL }}{{ market.marketTheme.css }}" rel="stylesheet">
+
+</head>
+
+{% include include_header %}
+
+{% include include_navigation %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+        {% if messages %}
+            {% for message in messages %}
+            {% if 'error' in message.tags %}
+            <div class="alert alert-danger">{{ message }}</div>
+            {% elif 'success' in message.tags %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+            {% block content %}
+
+            {% endblock %}
+        </div>
+        <div class="col-md-4">
+            {% include include_modules %}
+        </div>
+    </div>
+    <br>
+</div>
+</div>
+
+{% include include_footer %}
+
+</body>
+
+<!-- Load Scripts -->
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script lang="javascript" src="{{ STATIC_URL }}js/dynamicforms.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/transitions.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/market.js"></script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load('payments', '1.0', {
+    'packages': ['sandbox_config']
+  });
+</script>
+
+</html>

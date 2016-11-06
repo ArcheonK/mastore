@@ -1,0 +1,8 @@
+{% extends base %}
+{% load currency %}
+
+{% block content %}
+    {% if market.marketDesc %}
+                <p>{{ market.marketDesc|safe|removetags:"script object src SRC OBJECT SCRIPT" }}</p>
+    {% endif %}
+{% endblock %}

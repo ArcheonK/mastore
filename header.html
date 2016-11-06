@@ -1,0 +1,47 @@
+<!-- HEADER -->
+
+    <!-- Teal bar at top -->
+    <div class="container">
+        <nav class="navbar navbar-default navbar-user" role="navigation">
+            <div class="container">
+                <ul class="nav navbar-nav navbar-right">
+{% if 'username' in request.session %}
+<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="http://cravatar.eu/helmavatar/{{ request.session.username }}/20" class="img-circle"> {{ request.session.username }}</a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>
+        {% endif %}
+<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ cart_info.count }} {% if cart_info.count == 0 or cart_info.count >= 2 %}items{% else %}item{% endif %} <i class="fa fa-shopping-cart fa-2x"></i> <span class="caret"></span></a>
+          <ul class="dropdown-menu cart-dropdown" role="menu">
+{% for item in cart %}
+                                <li class="cart-dropdown-list">
+                                        <div class="cart-dropdown-image"><img src="{% if item.product.itemimage %}{{ MEDIA_URL }}{{ item.product.itemimage }}{% else %}{{ MEDIA_URL }}itemimages/default.png{% endif %}" class="img-responsive"></div>
+                                        <div class="cart-dropdown-name">{{ item.product.itemName }}</div>
+                                </li>
+                            {% endfor %}
+                            <li class="cart-dropdown-controls">
+                                    <div class="cart-dropdown-checkout"><a href="/checkout/" class="btn btn-success">Checkout</a></div>
+                            </li>
+          </ul>
+        </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Logo -->
+    <div class="container header-logosearch">
+        <div class="row">
+            <div class="col-sm-6 hidden-xs">
+                <a href="http://ts-mc.net"><img src="http://ts-mc.net/styles/uix/uix/logo.png" class="header-logo">
+                </a>
+            </div>
+            <div class="col-md-12 visible-xs text-center">
+                <a href="http://ts-mc.net"><img src="http://ts-mc.net/styles/uix/uix/logo.png" class="header-logo-mobile">
+                </a>
+            </div>
+        </div>
+        </div>

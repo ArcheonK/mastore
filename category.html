@@ -1,0 +1,131 @@
+{% extends base  %}
+{% load cumulative %}
+{% load i18n %}
+
+{% block content %}
+
+    {% if 'username' not in request.session %}
+        {% include include_login %}
+    {% else %}
+        {% if cat_info.catDesc %}
+
+            <h2>{{ cat_info.catName }}</h2>
+                <p>{{ cat_info.catDesc|safe|removetags:"script object src SRC OBJECT SCRIPT" }}</p>
+
+        {% endif %}
+
+        {% if cat_info.displaytype == '1' %}
+                <table class="table">
+                    {% for item in items %}
+                        {% if item.active == 1 %}
+                            <tr>
+                                <td width="55%">
+                                    {{ item.itemName }}
+                                </td>
+                                <td class="text-right" width="10%">
+                                    <a data-target="#{{ item.id }}" role="button" class="btn btn-sm btn-info"
+                                       data-toggle="modal">{% trans "Details" %}</a>
+                                </td>
+                            <tr>
+                                <td class="text-center" width="35%">
+                                    {% cumulative_pricing item.itemPrice cat_info.id item.id request.session.username CURRENCY.code market.currency %} {{ request.session.currency }}
+                                </td>
+                            </tr>
+                            </tr>
+
+                            <div class="modal fade" id="{{ item.id }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">{{ item.itemName }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ item.itemDesc|safe|removetags:"script object src SRC OBJECT SCRIPT" }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="pull-left"><strong>
+                                                {% cumulative_pricing item.itemPrice cat_info.id item.id request.session.username CURRENCY.code market.currency %} {{ request.session.currency }}
+                                            </strong></div>
+                                            <a href="/checkout/item/add/{{ item.id }}/1">
+                                                <button class="btn btn-primary">{% trans "Add to cart" %}</button>
+                                            </a>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    {% endfor %}
+                </table>
+        {% else %}
+
+                <div class="container">
+                    <div class="row">
+                        {% for item in items %}
+                            {% if item.active == 1 %}
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <div class="
+                                            {% if item.hideborder %}{% else %}category-image-bordered{% endif %} category-image-item">
+                                        <a href="#" data-target="#{{ item.id }}" class="" data-toggle="modal"
+                                           style="border: 0;">
+                                            <img id="itemimage" src="
+                                                    {% if item.itemimage %}{{ MEDIA_URL }}{{ item.itemimage }}{% else %}{{ MEDIA_URL }}itemimages/default.png{% endif %}"
+                                                 class="img-responsive">
+                                        </a>
+
+                                        <div class="caption">
+                                            <div class="category-item-name">
+                                                <b>{{ item.itemName }}</b>
+                                            </div>
+                                            
+                                            <div class="category-item-price">
+                                                {% cumulative_pricing item.itemPrice cat_info.id item.id request.session.username CURRENCY.code market.currency %} {{ request.session.currency }}
+                                                
+                                                <span class="text-right"><a data-target="#{{ item.id }}" role="button"
+                                                   class="btn btn-info btn-xs" data-toggle="modal">{% trans "Details" %}</a></span><br>
+                                            </div>
+                                            
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="{{ item.id }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="myModalLabel">{{ item.itemName }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>{{ item.itemDesc|safe|removetags:"script object src SRC OBJECT SCRIPT" }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="pull-left"><strong>
+                                                    {% cumulative_pricing item.itemPrice cat_info.id item.id request.session.username CURRENCY.code market.currency %} {{ request.session.currency }}
+                                                </strong></div>
+                                                <a href="/checkout/item/add/{{ item.id }}/1">
+                                                    <button class="btn btn-primary">{% trans "Add to cart" %}</button>
+                                                </a>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    {% trans "Close" %}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+        {% endif %}
+    {% endif %}
+{% endblock %}
